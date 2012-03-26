@@ -19,24 +19,24 @@
 case platform
 when "ubuntu"
   if platform_version.to_f >= 9.04
-    set[:daemontools][:bin_dir] = "/usr/bin"
-    set[:daemontools][:service_dir] = "/etc/service"
+    set['daemontools']['bin_dir'] = "/usr/bin"
+    set['daemontools']['service_dir'] = "/etc/service"
   else
-    set[:daemontools][:bin_dir] = "/usr/local/bin"
-    set[:daemontools][:service_dir] = "/etc/service"
+    set['daemontools']['bin_dir'] = "/usr/local/bin"
+    set['daemontools']['service_dir'] = "/etc/service"
   end 
 when "debian"
   if platform_version.to_f >= 5.0
-    set[:daemontools][:bin_dir] = "/usr/bin"
-    set[:daemontools][:service_dir] = "/etc/service"
+    set['daemontools']['bin_dir'] = "/usr/bin"
+    set['daemontools']['service_dir'] = "/etc/service"
   else
-    set[:daemontools][:bin_dir] = "/usr/local/bin"
-    set[:daemontools][:service_dir] = "/etc/service"
+    set['daemontools']['bin_dir'] = "/usr/local/bin"
+    set['daemontools']['service_dir'] = "/etc/service"
   end 
 when "arch"
-  set[:daemontools][:bin_dir] = "/usr/sbin"
-  set[:daemontools][:service_dir] = "/etc/service"
+  set['daemontools']['bin_dir'] = "/usr/sbin"
+  set['daemontools']['service_dir'] = "/etc/service"
 else
-  set[:daemontools][:bin_dir] = "/usr/local/bin"
-  set[:daemontools][:service_dir] = "/etc/service"
+  set['daemontools']['bin_dir'] = "/usr/local/bin"
+  set['daemontools']['service_dir'] = "/etc/service"
 end

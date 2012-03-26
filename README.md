@@ -13,7 +13,7 @@ Requires build-essential and ucspi-tcp cookbooks.
 Attributes
 ==========
 
-* `node[:daemontools][:bin_dir]` - Sets the location of the binaries for daemontools, default is selected by platform, or '/usr/local/bin' as a fallback.
+* `node['daemontools']['bin_dir']` - Sets the location of the binaries for daemontools, default is selected by platform, or '/usr/local/bin' as a fallback.
 
 Resource/Provider
 =================

@@ -40,7 +40,7 @@ when "package"
   package "daemontools" do
     action :install
   end
-  case node[:platform]
+  case node['platform']
   when "debian","ubuntu"
     package "daemontools-run" do
       action :install
@@ -61,10 +61,10 @@ when "source"
     (cd /tmp; tar zxvf daemontools-0.76.tar.gz)
     (cd /tmp/admin/daemontools-0.76; perl -pi -e 's/extern int errno;/\#include <errno.h>/' src/error.h)
     (cd /tmp/admin/daemontools-0.76; package/compile)
-    (cd /tmp/admin/daemontools-0.76; mv command/* #{node[:daemontools][:bin_dir]})
+    (cd /tmp/admin/daemontools-0.76; mv command/* #{node['daemontools']['bin_dir']})
     EOH
-    only_if {::File.exists?("#{node[:daemontools][:bin_dir]}/svscan")}
+    only_if {::File.exists?("#{node['daemontools']['bin_dir']}/svscan")}
   end
 else
-  Chef::Log.info("Could not find a method to install Daemon Tools for platform #{node[:platform]}, version #{node[:platform_version]}")
+  Chef::Log.info("Could not find a method to install Daemon Tools for platform #{node['platform']}, version #{node['platform_version']}")
 end
