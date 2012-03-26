@@ -104,12 +104,15 @@ action :enable do
     link"#{node['daemontools']['service_dir']}/#{new_resource.service_name}" do
       to new_resource.directory
     end
+
+    new_resource.updated_by_last_action(true)
   end
 end
 
 action :start do
   unless @svc.running
     execute "svc -u #{new_resource.service_name}"
+    new_resource.updated_by_last_action(true)
   end
 end
 
@@ -121,71 +124,83 @@ action :disable do
     execute "svc -dx . log" do
       cwd new_resource.directory
     end
+    new_resource.updated_by_last_action(true)
   end
 end
 
 action :stop do
   if @svc.running
     execute "svc -p #{node['daemontools']['service_dir']}/#{new_resource.service_name}"
+    new_resource.updated_by_last_action(true)
   end
 end
 
 action :restart do
   if @svc.running
     execute "svc -t #{node['daemontools']['service_dir']}/#{new_resource.service_name}"
+    new_resource.updated_by_last_action(true)
   end
 end
 
 action :up do
   if @svc.running
     execute "svc -u #{node['daemontools']['service_dir']}/#{new_resource.service_name}"
+    new_resource.updated_by_last_action(true)
   end
 end
 
 action :once do
   if @svc.running
     execute "svc -o #{node['daemontools']['service_dir']}/#{new_resource.service_name}"
+    new_resource.updated_by_last_action(true)
   end
 end
 
 action :pause do
   if @svc.running
     execute "svc -p #{node['daemontools']['service_dir']}/#{new_resource.service_name}"
+    new_resource.updated_by_last_action(true)
   end
 end
 
 action :cont do
   if @svc.running
     execute "svc -c #{node['daemontools']['service_dir']}/#{new_resource.service_name}"
+    new_resource.updated_by_last_action(true)
   end
 end
 
 action :hup do
   if @svc.running
     execute "svc -h #{node['daemontools']['service_dir']}/#{new_resource.service_name}"
+    new_resource.updated_by_last_action(true)
   end
 end
 
 action :alrm do
   if @svc.running
     execute "svc -a #{node['daemontools']['service_dir']}/#{new_resource.service_name}"
+    new_resource.updated_by_last_action(true)
   end
 end
 
 action :int do
   if @svc.running
     execute "svc -i #{node['daemontools']['service_dir']}/#{new_resource.service_name}"
+    new_resource.updated_by_last_action(true)
   end
 end
 
 action :term do
   if @svc.running
     execute "svc -t #{node['daemontools']['service_dir']}/#{new_resource.service_name}"
+    new_resource.updated_by_last_action(true)
   end
 end
 
 action :kill do
   if @svc.running
     execute "svc -k #{node['daemontools']['service_dir']}/#{new_resource.service_name}"
+    new_resource.updated_by_last_action(true)
   end
 end
