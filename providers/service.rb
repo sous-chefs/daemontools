@@ -74,14 +74,13 @@ action :enable do
           mode 0755
         end
       end
-      if new_resource.finish
-        template "#{new_resource.directory}/finish" do
-          source "sv-#{new_resource.template}-finish.erb"
-          cookbook new_resource.cookbook if new_resource.cookbook
-          owner new_resource.owner
-          group new_resource.group
-          mode 0755
-        end
+      template "#{new_resource.directory}/finish" do
+        source "sv-#{new_resource.template}-finish.erb"
+        cookbook new_resource.cookbook if new_resource.cookbook
+        owner new_resource.owner
+        group new_resource.group
+        mode 0755
+        only_if { new_resource.finish }
       end
     end
 
