@@ -37,8 +37,8 @@ attribute :cookbook, :kind_of => String
 attribute :enabled, :default => false
 attribute :running, :default => false
 attribute :variables, :kind_of => Hash, :default => {}
-attribute :owner, :regex => Chef::Config[:user_valid_regex]
-attribute :group, :regex => Chef::Config[:group_valid_regex]
+attribute :owner, :regex => Chef::Config['user_valid_regex']
+attribute :group, :regex => Chef::Config['group_valid_regex']
 attribute :finish, :kind_of => [TrueClass, FalseClass]
 attribute :log, :kind_of => [TrueClass, FalseClass]
 attribute :env, :kind_of => Hash, :default => {}

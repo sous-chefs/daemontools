@@ -20,29 +20,15 @@
 include_recipe "build-essential"
 include_recipe "ucspi-tcp"
 
-installation_method = value_for_platform(
-    "arch" => { "default" => "aur" },
-    "debian" => { "4.0" => "source", "default" => "package" },
-    "ubuntu" => {
-      "6.06" => "source",
-      "6.10" => "source",
-      "7.04" => "source",
-      "7.10" => "source",
-      "8.04" => "source",
-      "8.10" => "source",
-      "default" => "package"
-    },
-    "default" => { "default" => "source" }
-)
-
-case installation_method
+case node['daemontools']['install_method']
 when "package"
-  package "daemontools" do
-    action :install
-  end
   case node['platform']
   when "debian","ubuntu"
     package "daemontools-run" do
+      action :install
+    end
+  else
+    package "daemontools" do
       action :install
     end
   end
@@ -63,7 +49,7 @@ when "source"
     (cd /tmp/admin/daemontools-0.76; package/compile)
     (cd /tmp/admin/daemontools-0.76; mv command/* #{node['daemontools']['bin_dir']})
     EOH
-    only_if {::File.exists?("#{node['daemontools']['bin_dir']}/svscan")}
+    not_if {::File.exists?("#{node['daemontools']['bin_dir']}/svscan")}
   end
 else
   Chef::Log.info("Could not find a method to install Daemon Tools for platform #{node['platform']}, version #{node['platform_version']}")
