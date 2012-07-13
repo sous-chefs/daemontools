@@ -42,3 +42,8 @@ attribute :group, :regex => Chef::Config[:group_valid_regex]
 attribute :finish, :kind_of => [TrueClass, FalseClass]
 attribute :log, :kind_of => [TrueClass, FalseClass]
 attribute :env, :kind_of => Hash, :default => {}
+
+def initialize(*args)
+  super
+  @action = :start
+end
