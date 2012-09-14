@@ -1,0 +1,3 @@
+cookbook "daemontools" do
+  runtimes []
+end
