@@ -1,3 +1,7 @@
 cookbook "daemontools" do
+  configuration("default") { runtimes [] }
+  configuration("source") { runtimes [] }
+  configuration("aur") { runtimes [] }
+  configuration("package") { runtimes [] }
   runtimes []
 end

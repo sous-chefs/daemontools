@@ -50,7 +50,7 @@ action :enable do
       group new_resource.group
       mode 0755
     end
-    
+
     if new_resource.template
       template "#{new_resource.directory}/run" do
         source "sv-#{new_resource.template}-run.erb"

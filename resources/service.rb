@@ -26,7 +26,7 @@
 # -a: Alarm. Send the service an ALRM signal.
 # -i: Interrupt. Send the service an INT signal.
 # -t: Terminate. Send the service a TERM signal.
-# -k: Kill. Send the service a KILL signal. 
+# -k: Kill. Send the service a KILL signal.
 
 actions :start, :stop, :status, :restart, :up, :down, :once, :pause, :cont, :hup, :alrm, :int, :term, :kill, :enable, :disable
 
