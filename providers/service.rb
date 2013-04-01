@@ -100,7 +100,7 @@ action :enable do
       end
     end
 
-    link"#{node['daemontools']['service_dir']}/#{new_resource.service_name}" do
+    link "#{node['daemontools']['service_dir']}/#{new_resource.service_name}" do
       to new_resource.directory
     end
 
