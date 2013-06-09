@@ -4,7 +4,7 @@ maintainer_email "cookbooks@opscode.com"
 license          "Apache 2.0"
 description      "Installs/Configures daemontools"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "1.0.0"
+version          "1.0.2"
 recipe "daemontools", "Installs daemontools by source or package depending on platform"
 
 %w{ build-essential ucspi-tcp }.each do |cb|
