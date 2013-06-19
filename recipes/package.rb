@@ -22,6 +22,11 @@ when "debian"
   package "daemontools-run" do
     action :install
   end
+when "gentoo"
+  package "sys-process/daemontools" do
+    version "0.76-r7" # specify the version for now as a workaround for CHEF-3442 issue
+    action :install
+  end
 else
   Chef::Log.info "Attempting package installation method of daemontools in #{cookbook_name}::#{recipe_name}."
   Chef::Log.info "If this fails, try node['daemontools']['install_method'] 'source'"
