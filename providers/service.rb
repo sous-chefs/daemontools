@@ -44,73 +44,75 @@ def load_current_resource
 end
 
 action :enable do
-  unless @svc.enabled
-    directory new_resource.directory do
+  directory new_resource.directory do
+    owner new_resource.owner
+    group new_resource.group
+    mode 0755
+  end
+
+  if new_resource.template
+    template "#{new_resource.directory}/run" do
+      source "sv-#{new_resource.template}-run.erb"
+      cookbook new_resource.cookbook if new_resource.cookbook
       owner new_resource.owner
       group new_resource.group
       mode 0755
+      variables :variables => new_resource.variables unless new_resource.variables.empty?
     end
-
-    if new_resource.template
-      template "#{new_resource.directory}/run" do
-        source "sv-#{new_resource.template}-run.erb"
+    if new_resource.log
+      directory "#{new_resource.directory}/log" do
+        owner new_resource.owner
+        group new_resource.group
+        mode 0755
+      end
+      template "#{new_resource.directory}/log/run" do
+        source "sv-#{new_resource.template}-log-run.erb"
         cookbook new_resource.cookbook if new_resource.cookbook
         owner new_resource.owner
         group new_resource.group
         mode 0755
         variables :variables => new_resource.variables unless new_resource.variables.empty?
       end
-      if new_resource.log
-        directory "#{new_resource.directory}/log" do
-          owner new_resource.owner
-          group new_resource.group
-          mode 0755
-        end
-        template "#{new_resource.directory}/log/run" do
-          source "sv-#{new_resource.template}-log-run.erb"
-          cookbook new_resource.cookbook if new_resource.cookbook
-          owner new_resource.owner
-          group new_resource.group
-          mode 0755
-        end
-      end
-      template "#{new_resource.directory}/finish" do
-        source "sv-#{new_resource.template}-finish.erb"
-        cookbook new_resource.cookbook if new_resource.cookbook
+    end
+    template "#{new_resource.directory}/finish" do
+      source "sv-#{new_resource.template}-finish.erb"
+      cookbook new_resource.cookbook if new_resource.cookbook
+      owner new_resource.owner
+      group new_resource.group
+      mode 0755
+      variables :variables => new_resource.variables unless new_resource.variables.empty?
+      only_if { new_resource.finish }
+    end
+  end
+
+  unless new_resource.env.empty?
+    directory "#{new_resource.directory}/env" do
+      owner new_resource.owner
+      group new_resource.group
+      mode 0755
+    end
+    new_resource.env.each do |var, value|
+      file "#{new_resource.directory}/env/#{var}" do
+        content value
         owner new_resource.owner
         group new_resource.group
-        mode 0755
-        only_if { new_resource.finish }
+        mode 0644
       end
     end
+  end
 
-    unless new_resource.env.empty?
-      directory "#{new_resource.directory}/env" do
-        owner new_resource.owner
-        group new_resource.group
-        mode 0755
-      end
-      new_resource.env.each do |var, value|
-        file "#{new_resource.directory}/env/#{var}" do
-          content value
-          owner new_resource.owner
-          group new_resource.group
-          mode 0644
-        end
-      end
-    end
+  link "#{node['daemontools']['service_dir']}/#{new_resource.service_name}" do
+    to new_resource.directory
+  end
 
-    link "#{node['daemontools']['service_dir']}/#{new_resource.service_name}" do
-      to new_resource.directory
-    end
-
+  unless @svc.enabled
     new_resource.updated_by_last_action(true)
   end
 end
 
 action :start do
   unless @svc.running
-    execute "svc -u #{new_resource.service_name}"
+    execute "svc -u #{node['daemontools']['service_dir']}/#{new_resource.service_name}"
     new_resource.updated_by_last_action(true)
   end
 end
