@@ -20,6 +20,8 @@
 default['daemontools']['bin_dir'] = "/usr/local/bin"
 default['daemontools']['service_dir'] = "/etc/service"
 default['daemontools']['install_method'] = "source"
+default['daemontools']['source_url'] = "http://cr.yp.to/daemontools/daemontools-0.76.tar.gz"
+default['daemontools']['source_checksum'] = "a55535012b2be7a52dcd9eccabb9a198b13be50d0384143bd3b32b8710df4c1f"
 
 case node['platform']
 when "ubuntu"
