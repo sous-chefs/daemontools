@@ -3,6 +3,11 @@ daemontools Cookbook CHANGELOG
 This file is used to list changes made in each version of the daemontools cookbook.
 
 
+v1.3.0 (2014-04-23)
+-------------------
+- COOK-2655 : Replace "execute" method with "run_command_with_systems_locale"
+
+
 v1.2.0 (2014-02-25)
 -------------------
 - [COOK-4181] - Parameterize source tarball location
