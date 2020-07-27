@@ -2,7 +2,10 @@
 # Cookbook Name:: daemontools
 # Recipe:: package
 #
+# Author: Joshua Timberman <joshua@chef.io>
+#
 # Copyright 2010-2012, Opscode, Inc.
+# Copyright 2014, Chef Software, Inc. <legal@chef.io>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,22 +20,7 @@
 # limitations under the License.
 #
 
-case node['platform_family']
-when "debian"
-  package "daemontools-run" do
-    action :install
-  end
-when "gentoo"
-  package "sys-process/daemontools" do
-    version "0.76-r7" # specify the version for now as a workaround for CHEF-3442 issue
-    action :install
-  end
-else
-  Chef::Log.info "Attempting package installation method of daemontools in #{cookbook_name}::#{recipe_name}."
-  Chef::Log.info "If this fails, try node['daemontools']['install_method'] 'source'"
-
-  package "daemontools" do
-    action :install
-  end
+package node['daemontools']['package_name'] do
+  # this will be removed in a future major version of the cookbook
+  version '0.76-r7' if platform?('gentoo')
 end
-

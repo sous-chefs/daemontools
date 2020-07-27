@@ -17,12 +17,12 @@
 # limitations under the License.
 #
 
-if platform?("arch")
-  pacman_aur "daemontools" do
-    patches ["daemontools-0.76.svscanboot-path-fix.patch"]
+if platform?('arch')
+  pacman_aur 'daemontools' do
+    patches ['daemontools-0.76.svscanboot-path-fix.patch']
     pkgbuild_src true
-    action [:build,:install]
+    action [:build, :install]
   end
 else
-  Chef::Log.warn("daemontools installation with AUR doesn't make sense on non-ArchLinux platforms, skipping #{cookbook_name}::#{recipe_name}")
+  Chef::Log.warn("daemontools installation with AUR doesn't make sense on #{node['platform']}")
 end

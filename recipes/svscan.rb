@@ -2,7 +2,8 @@
 # Cookbook Name:: daemontools
 # Recipe:: default
 #
-# Copyright 2010, Opscode, Inc.
+# Author: Joshua Timberman <joshua@chef.io>
+# Copyright 2014, Chef Software, Inc. <legal@chef.io>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,5 +18,6 @@
 # limitations under the License.
 #
 
-include_recipe "daemontools::#{node['daemontools']['install_method']}"
-include_recipe 'daemontools::svscan' if node['daemontools']['start_svscan']
+service 'svscan' do
+  action [:enable, :start]
+end

@@ -48,6 +48,7 @@ notifying_action :enable do
   directory new_resource.directory do
     owner new_resource.owner
     group new_resource.group
+    recursive true
     mode 0755
   end
 
@@ -72,6 +73,7 @@ notifying_action :enable do
         owner new_resource.owner
         group new_resource.group
         mode 0755
+        variables :variables => new_resource.variables unless new_resource.variables.empty?
       end
     end
     template "#{new_resource.directory}/finish" do
@@ -80,6 +82,7 @@ notifying_action :enable do
       owner new_resource.owner
       group new_resource.group
       mode 0755
+      variables :variables => new_resource.variables unless new_resource.variables.empty?
       only_if { new_resource.finish }
     end
   end
@@ -139,6 +142,13 @@ end
 action :up do
   if @svc.running
     run_command_with_systems_locale(:command => "svc -u #{node['daemontools']['service_dir']}/#{new_resource.service_name}")
+    new_resource.updated_by_last_action(true)
+  end
+end
+
+action :down do
+  if @svc.running
+    run_command_with_systems_locale(:command => "svc -d #{node['daemontools']['service_dir']}/#{new_resource.service_name}")
     new_resource.updated_by_last_action(true)
   end
 end

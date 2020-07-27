@@ -1,13 +1,12 @@
-name             "daemontools"
-maintainer       "Opscode, Inc."
-maintainer_email "cookbooks@opscode.com"
-license          "Apache 2.0"
-description      "Installs/Configures daemontools"
-long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "1.3.1"
-recipe "daemontools", "Installs daemontools by source or package depending on platform"
+name             'daemontools'
+maintainer       'Joshua Timberman'
+maintainer_email 'cookbooks@housepub.org'
+license          'Apache 2.0'
+description      'Installs/Configures daemontools'
+version          '1.5.0'
+recipe 'daemontools', 'Installs daemontools by source or package depending on platform'
 
-%w{ build-essential ucspi-tcp }.each do |cb|
+%w{ build-essential pacman }.each do |cb|
   depends cb
 end
 
