@@ -18,6 +18,14 @@
 #
 
 if platform?('arch')
+  if node['daemontools']['service_dir'] != '/etc/service'
+    raise "service_dir(#{node['daemontools']['service_dir']}) must be /etc/service for aur installation"
+  end
+
+  include_recipe 'pacman::default'
+
+  package 'fakeroot'
+
   pacman_aur 'daemontools' do
     patches ['daemontools-0.76.svscanboot-path-fix.patch']
     pkgbuild_src true

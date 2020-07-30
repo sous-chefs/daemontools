@@ -1,6 +1,6 @@
 #
 # Cookbook:: daemontools
-# Recipe:: default
+# Recipe:: svscan
 #
 # Author: Joshua Timberman <joshua@chef.io>
 # Copyright:: 2014, Chef Software, Inc. <legal@chef.io>
@@ -18,6 +18,55 @@
 # limitations under the License.
 #
 
-service 'svscan' do
-  action [:enable, :start]
+directory 'daemontools service directory' do
+  path node['daemontools']['service_dir']
+end
+
+if node['daemontools']['install_method'] == 'source'
+  if node['init_package'] == 'systemd'
+    template '/usr/lib/systemd/system/daemontools.service' do
+      source 'daemontools.service.erb'
+      variables(
+        bin_dir: node['daemontools']['bin_dir'],
+        service_dir: node['daemontools']['service_dir']
+      )
+      notifies :run, 'execute[enable daemontools service]', :immediately
+    end
+
+    execute 'enable daemontools service' do
+      command 'systemctl enable daemontools'
+      action :nothing
+      notifies :run, 'execute[reload systemd for daemontools service]', :immediately
+    end
+
+    execute 'reload systemd for daemontools service' do
+      command 'systemctl daemon-reload'
+      action :nothing
+      notifies :run, 'execute[start daemontools initially]', :immediately
+    end
+
+    execute 'start daemontools initially' do
+      command 'systemctl start daemontools'
+      action :nothing
+    end
+  else
+    package 'csh'
+
+    bash 'register_service' do
+      user 'root'
+      not_if 'grep svscanboot /etc/rc.local'
+      code '(cd /tmp/daemontools; package/run.rclocal)'
+    end
+  end
+else
+  service value_for_platform(
+            %w(debian ubuntu) => {
+              'default' => 'daemontools',
+            },
+            %w(redhat centos amazon arch) => {
+              'default' => 'svscan',
+            }
+          ) do
+    action [:enable, :start]
+  end
 end

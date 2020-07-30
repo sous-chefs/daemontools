@@ -17,8 +17,6 @@
 # limitations under the License.
 #
 
-include_recipe 'build-essential'
-
 remote_file "#{Chef::Config[:file_cache_path]}/daemontools.tar.gz" do
   source node['daemontools']['source_url']
   checksum node['daemontools']['source_checksum']
@@ -33,8 +31,10 @@ bash 'install_daemontools' do
   user 'root'
   cwd Chef::Config[:file_cache_path]
   not_if { ::File.exist?("#{node['daemontools']['bin_dir']}/svc") }
-  code "(tar zxvf daemontools.tar.gz -C /tmp/daemontools --strip-components 2)
+  code <<~EOCODE
+    (tar zxvf daemontools.tar.gz -C /tmp/daemontools --strip-components 2)
     (cd /tmp/daemontools; perl -pi -e 's/extern int errno;/\#include <errno.h>/' src/error.h)
     (cd /tmp/daemontools; package/compile)
-    (cd /tmp/daemontools; mv command/* #{node['daemontools']['bin_dir']})".gsub(/^\s+/, '')
+    (cd /tmp/daemontools; mv command/* #{node['daemontools']['bin_dir']})
+  EOCODE
 end
