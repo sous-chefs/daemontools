@@ -50,3 +50,14 @@ suites:
       - recipe[daemontools_test::default]
       - recipe[daemontools_test::source_setup]
       - recipe[daemontools::default]
+    verifier:
+      inspec_tests:
+        - test/integration/default
+  - name: service
+    run_list:
+      - recipe[daemontools_test::source_setup]
+      - recipe[daemontools::default]
+      - recipe[daemontools_test::service]
+    verifier:
+      inspec_tests:
+        - test/integration/service
