@@ -38,3 +38,15 @@ bash 'install_daemontools' do
     (cd /tmp/daemontools; mv command/* #{node['daemontools']['bin_dir']})
   EOCODE
 end
+
+# Original svscanboot in tarball expects bindir=/command, service_dir=/service
+template "#{node['daemontools']['bin_dir']}/svscanboot" do
+  source 'svscanboot.erb'
+  owner 'root'
+  group 'root'
+  mode '0o555'
+  variables(
+    bin_dir: node['daemontools']['bin_dir'],
+    service_dir: node['daemontools']['service_dir']
+  )
+end
