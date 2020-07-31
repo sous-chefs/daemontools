@@ -26,6 +26,6 @@
 
 # Setup for source installation
 
-if platform?('redhat', 'centos', 'amazon')
+if platform?('redhat', 'centos', 'amazon') && node['daemontools']['install_method'] == 'source'
   package %w(perl gcc)
 end
