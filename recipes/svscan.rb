@@ -63,7 +63,7 @@ else
             %w(debian ubuntu) => {
               'default' => 'daemontools',
             },
-            %w(redhat centos amazon arch) => {
+            %w(redhat centos amazon arch gentoo) => {
               'default' => 'svscan',
             }
           ) do

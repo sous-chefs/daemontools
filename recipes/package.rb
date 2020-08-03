@@ -20,7 +20,8 @@
 # limitations under the License.
 #
 
-package node['daemontools']['package_name'] do
-  # this will be removed in a future major version of the cookbook
-  version '0.76-r7' if platform?('gentoo')
+if platform?('gentoo') && node['daemontools']['service_dir'] != '/service'
+  raise "service_dir(#{node['daemontools']['service_dir']}) must be /service for gentoo package installation"
 end
+
+package node['daemontools']['package_name']
