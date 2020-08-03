@@ -7,6 +7,6 @@ version          '1.5.0'
 
 depends 'pacman'
 
-%w(debian ubuntu arch).each do |os|
+%w(debian ubuntu arch redhat centos gentoo).each do |os|
   supports os
 end
