@@ -5,7 +5,7 @@ license          'Apache-2.0'
 description      'Installs/Configures daemontools'
 version          '1.5.0'
 
-depends 'pacman'
+depends 'pacman', '~> 1.2'
 
 %w(debian ubuntu arch redhat centos gentoo).each do |os|
   supports os
