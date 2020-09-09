@@ -1,0 +1,9 @@
+[Unit]
+Description=Daemontools service supervision
+
+[Service]
+ExecStart=<%= @bin_dir %>/svscanboot <%= @service_dir %>
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

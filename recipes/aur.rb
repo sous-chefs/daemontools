@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: daemontools
+# Cookbook:: daemontools
 # Recipe:: aur
 #
-# Copyright 2010-2012, Opscode, Inc.
+# Copyright:: 2010-2012, Opscode, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,6 +18,14 @@
 #
 
 if platform?('arch')
+  if node['daemontools']['service_dir'] != '/etc/service'
+    raise "service_dir(#{node['daemontools']['service_dir']}) must be /etc/service for aur installation"
+  end
+
+  include_recipe 'pacman::default'
+
+  package 'fakeroot'
+
   pacman_aur 'daemontools' do
     patches ['daemontools-0.76.svscanboot-path-fix.patch']
     pkgbuild_src true

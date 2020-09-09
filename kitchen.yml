@@ -1,0 +1,75 @@
+---
+driver:
+  name: dokken
+
+provisioner:
+  name: dokken
+
+verifier:
+  name: inspec
+
+transport:
+  name: dokken
+
+platforms:
+  - name: ubuntu-20.04
+    driver:
+      image: dokken/ubuntu-20.04
+      pid_one_command: /bin/systemd
+      privileged: true
+      intermediate_instructions:
+        - RUN /usr/bin/apt-get update
+
+  - name: centos-8
+    driver:
+      image: dokken/centos-8
+      privileged: true
+      pid_one_command: /usr/lib/systemd/systemd
+
+  - name: centos-7
+    driver:
+      image: dokken/centos-7
+      privileged: true
+      pid_one_command: /usr/lib/systemd/systemd
+
+  - name: amazonlinux-2
+    driver:
+      image: dokken/amazonlinux-2
+      privileged: true
+      pid_one_command: /usr/lib/systemd/systemd
+
+  - name: archlinux
+    driver:
+      image: archlinux
+      privileged: true
+      pid_one_command: /usr/lib/systemd/systemd
+
+  - name: gentoo
+    driver:
+      image: gentoo/stage3-amd64
+      privileged: true
+      pid_one_command: /sbin/init
+      intermediate_instructions:
+        - RUN echo 'GENTOO_MIRRORS=http://gentoo.mirrors.tera-byte.com/' >> /etc/portage/make.conf
+        - RUN mkdir -p /etc/portage/repos.conf
+        - RUN cp /usr/share/portage/config/repos.conf /etc/portage/repos.conf/gentoo.conf
+        - RUN sed -i -e 's/sync-uri =.*/sync-uri = rsync:\/\/rsync.us.gentoo.org\/gentoo-portage/' /etc/portage/repos.conf/gentoo.conf
+        - RUN emerge --sync || true
+
+suites:
+  - name: default
+    run_list:
+      - recipe[daemontools_test::default]
+      - recipe[daemontools_test::source_setup]
+      - recipe[daemontools::default]
+    verifier:
+      inspec_tests:
+        - test/integration/default
+  - name: service
+    run_list:
+      - recipe[daemontools_test::source_setup]
+      - recipe[daemontools::default]
+      - recipe[daemontools_test::service]
+    verifier:
+      inspec_tests:
+        - test/integration/service

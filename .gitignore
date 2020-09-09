@@ -1,4 +1,8 @@
+*~
 .bundle
 .cache
-.kitchen
 bin
+.kitchen.local.yml
+.kitchen/
+Berksfile.lock
+

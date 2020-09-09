@@ -1,11 +1,11 @@
 #
-# Cookbook Name:: daemontools
+# Cookbook:: daemontools
 # Recipe:: package
 #
 # Author: Joshua Timberman <joshua@chef.io>
 #
-# Copyright 2010-2012, Opscode, Inc.
-# Copyright 2014, Chef Software, Inc. <legal@chef.io>
+# Copyright:: 2010-2012, Opscode, Inc.
+# Copyright:: 2014, Chef Software, Inc. <legal@chef.io>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,7 +20,8 @@
 # limitations under the License.
 #
 
-package node['daemontools']['package_name'] do
-  # this will be removed in a future major version of the cookbook
-  version '0.76-r7' if platform?('gentoo')
+if platform?('gentoo') && node['daemontools']['service_dir'] != '/service'
+  raise "service_dir(#{node['daemontools']['service_dir']}) must be /service for gentoo package installation"
 end
+
+package node['daemontools']['package_name']

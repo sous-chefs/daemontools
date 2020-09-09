@@ -1,0 +1,9 @@
+#!/bin/sh
+LOGDIR=./main
+LOGUSER=root
+
+if [ ! -d $LOGDIR ] ; then
+  install -d -o $LOGUSER -g $LOGUSER -m 2755 $LOGDIR || exit 1
+fi
+
+exec setuidgid $LOGUSER multilog t s999999 n10 $LOGDIR
