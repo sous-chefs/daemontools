@@ -1,35 +1,10 @@
+---
 version: 2.1
 orbs:
-  kitchen: sous-chefs/kitchen@2.1.1
-jobs:
-  lint:
-    executor: kitchen/chefdk
-    steps:
-      - checkout
-      - run:
-          name: Run delivery lint
-          command: delivery local lint
-    environment:
-      CHEF_LICENSE: "accept-no-persist"
+  kitchen: sous-chefs/kitchen@2
 workflows:
-  version: 2
-  test:
+  danger:
     jobs:
-      - lint
-      - kitchen/dokken-single:
-          suite: default
-      - kitchen/dokken-single:
-          suite: service
-  nightly:
-    triggers:
-      - schedule:
-          cron: "0 15 * * *"
-          filters:
-            branches:
-              only:
-                - main
-    jobs:
-      - kitchen/dokken-single:
-          suite: default
-      - kitchen/dokken-single:
-          suite: service
+      - kitchen/danger:
+          name: danger
+          context: Danger-Minimal
