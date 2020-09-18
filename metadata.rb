@@ -1,9 +1,9 @@
-name             'daemontools'
-maintainer       'Joshua Timberman'
-maintainer_email 'cookbooks@housepub.org'
-license          'Apache-2.0'
-description      'Installs/Configures daemontools'
-version          '1.5.0'
+name              'daemontools'
+maintainer        'Sous Chefs'
+maintainer_email  'help@sous-chefs.org'
+license           'Apache-2.0'
+description       'Installs/Configures daemontools'
+version           '1.5.0'
 
 depends 'pacman', '~> 1.2'
 
