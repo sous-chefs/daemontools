@@ -4,7 +4,9 @@ This file is used to list changes made in each version of the daemontools cookbo
 
 ## UNRELEASED
 
-- Transfered ownership to sous-chefs
+- Transferred ownership to sous-chefs
+- Updated supported platforms
+- Rewrote for new (v12.5+) custom resource
 
 ## v1.5.0 (2014-12-30)
 
