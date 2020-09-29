@@ -43,6 +43,9 @@ jobs:
           - 'centos-7'
           - 'centos-8'
           - 'ubuntu-2004'
+          - 'amazonlinux-2'
+          - 'archlinux'
+          - 'gentoo'
         suite:
           - 'default'
           - 'service'
