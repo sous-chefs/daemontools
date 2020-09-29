@@ -6,7 +6,7 @@
 [![OpenCollective](https://opencollective.com/sous-chefs/sponsors/badge.svg)](#sponsors)
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
 
-Installs [DJB's Daemontools](http://cr.yp.to/daemontools.html) and includes a service LWRP.
+Installs [DJB's Daemontools](http://cr.yp.to/daemontools.html) and includes a service custom resource.
 
 ## Requirements
 
@@ -24,7 +24,7 @@ This cookbook is known in the past to work on ArchLinux and Gentoo, but as they 
 
 May work on other platforms with or without modification using the "source" installation method. See __Attributes__ and __Recipes__ below.
 
-### Cookbooks
+### Depending Cookbooks
 
 - pacman - for `aur` recipe, on ArchLinux systems
 - build-essential - for `source` recipe
@@ -63,9 +63,9 @@ The source installation of daemontools should work on most other platforms that 
 
 Enables and starts the `svscan` service. This requires that the local system have properly set up the `svscan` service for the appropriate init system. It's outside the scope of this cookbook to detect this for every possible platform, so a custom recipe may be required. For example, Debian family `daemontools-run` package provides this.
 
-## Resource/Provider
+## Resource
 
-This cookbook includes an LWRP, `daemontools_service`, for managing services with daemontools. Examples:
+This cookbook includes a custom resource, `daemontools_service`, for managing services with daemontools. Examples:
 
 ```ruby
 daemontools_service "tinydns-internal" do
@@ -91,7 +91,7 @@ Enabling a service (`:enable` action) is done by setting up the directory locate
 - `run` script that runs the service startup using the `template` resource attribute name.
 - `log/run` directory and script that runs the logger if the resource attribute `log` is true.
 - `finish` script, if specified using the `finish` resource attribute
-- `env` directory, containing ENV variablesif specified with the `env` resource attribute
+- `env` directory, containing ENV variables if specified with the `env` resource attribute
 - links the `node['daemontools']['service_dir']/service_name` to the `service_name` directory.
 
 The default action is `:start` - once enabled daemontools services are started by svscan anyway.
@@ -100,7 +100,7 @@ The name attribute for the resource is `service_name`.
 
 ## Usage
 
-Include the daemontools recipe on nodes that should have daemontools installed for managing services. Use the `daemontools_service` LWRP for any services that should be managed by daemontools. In your cookbooks where `daemontools_service` is used, create the appropriate run and log-run scripts for your service. For example if the service is "flowers":
+Include the daemontools recipe on nodes that should have daemontools installed for managing services. Use the `daemontools_service` custom resource for any services that should be managed by daemontools. In your cookbooks where `daemontools_service` is used, create the appropriate run and log-run scripts for your service. For example if the service is "flowers":
 
 ```ruby
 daemontools_service "flowers" do
