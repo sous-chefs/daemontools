@@ -1,53 +1,52 @@
 ---
 driver:
   name: dokken
-
-provisioner:
-  name: dokken
-
-verifier:
-  name: inspec
+  privileged: true
+  chef_version: current
 
 transport:
   name: dokken
 
+provisioner:
+  name: dokken
+  deprecations_as_errors: true
+
+verifier:
+  name: inspec
+
 platforms:
-  - name: ubuntu-20.04
+  - name: centos-7
     driver:
-      image: dokken/ubuntu-20.04
-      pid_one_command: /bin/systemd
-      privileged: true
-      intermediate_instructions:
-        - RUN /usr/bin/apt-get update
+      image: dokken/centos-7
+      platform: rhel
+      pid_one_command: /usr/lib/systemd/systemd
 
   - name: centos-8
     driver:
       image: dokken/centos-8
-      privileged: true
+      platform: rhel
       pid_one_command: /usr/lib/systemd/systemd
 
-  - name: centos-7
+  - name: ubuntu-20.04
     driver:
-      image: dokken/centos-7
-      privileged: true
-      pid_one_command: /usr/lib/systemd/systemd
+      image: dokken/ubuntu-20.04
+      pid_one_command: /bin/systemd
+      intermediate_instructions:
+        - RUN /usr/bin/apt-get update
 
   - name: amazonlinux-2
     driver:
       image: dokken/amazonlinux-2
-      privileged: true
       pid_one_command: /usr/lib/systemd/systemd
 
   - name: archlinux
     driver:
       image: archlinux
-      privileged: true
       pid_one_command: /usr/lib/systemd/systemd
 
   - name: gentoo
     driver:
       image: gentoo/stage3-amd64
-      privileged: true
       pid_one_command: /sbin/init
       intermediate_instructions:
         - RUN echo 'GENTOO_MIRRORS=http://gentoo.mirrors.tera-byte.com/' >> /etc/portage/make.conf
