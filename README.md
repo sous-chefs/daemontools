@@ -14,8 +14,11 @@ Installs [DJB's Daemontools](http://cr.yp.to/daemontools.html) and includes a se
 
 Tested via [Test Kitchen](http://kitchen.ci).
 
-- Debian 7.6
-- Ubuntu 14.04, 12.04, 10.04
+- Ubuntu 20.04
+- CentOS 7, 8
+- AmazonLinux 2
+- Gentoo
+- ArchLinux
 
 This cookbook is known in the past to work on ArchLinux and Gentoo, but as they are rolling release distributions, it is difficult to ensure compatibility over time.
 
