@@ -10,3 +10,5 @@ depends 'pacman', '~> 1.2'
 %w(debian ubuntu arch redhat centos gentoo).each do |os|
   supports os
 end
+
+supports 'amazon', '>= 2.0'
