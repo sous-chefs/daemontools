@@ -30,13 +30,13 @@
 
 default_action :start
 
-property :service_name, name_property: true
+property :service_name, String, name_property: true
 property :directory, String, required: true
 property :template, [String, false], default: false
 property :cookbook, String
 property :variables, Hash, default: {}
-property :owner, regex: Chef::Config['user_valid_regex']
-property :group, regex: Chef::Config['group_valid_regex']
+property :owner, [Integer, String], regex: Chef::Config['user_valid_regex']
+property :group, [Integer, String], regex: Chef::Config['group_valid_regex']
 property :finish, [true, false]
 property :log, [true, false]
 property :env, Hash, default: {}
