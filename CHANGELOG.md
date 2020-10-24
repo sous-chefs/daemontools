@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the daemontools cookbook.
 
+## Unreleased
+
+- Adapt to the latest cookstyle (6.21.1)
+
 ## v1.6.0 (2020-10-16)
 
 - Transferred ownership to sous-chefs
