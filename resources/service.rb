@@ -30,13 +30,13 @@
 
 default_action :start
 
-property :service_name, name_property: true
+property :service_name, String, name_property: true
 property :directory, String, required: true
 property :template, [String, false], default: false
 property :cookbook, String
 property :variables, Hash, default: {}
-property :owner, regex: Chef::Config['user_valid_regex']
-property :group, regex: Chef::Config['group_valid_regex']
+property :owner, [Integer, String], regex: Chef::Config['user_valid_regex']
+property :group, [Integer, String], regex: Chef::Config['group_valid_regex']
 property :finish, [true, false]
 property :log, [true, false]
 property :env, Hash, default: {}
@@ -47,7 +47,7 @@ action :enable do
     owner new_resource.owner
     group new_resource.group
     recursive true
-    mode '0o755'
+    mode '0755'
   end
 
   if new_resource.template
@@ -56,21 +56,21 @@ action :enable do
       cookbook new_resource.cookbook
       owner new_resource.owner
       group new_resource.group
-      mode '0o755'
+      mode '0755'
       variables(variables: new_resource.variables) unless new_resource.variables.empty?
     end
     if new_resource.log
       directory "#{new_resource.directory}/log" do
         owner new_resource.owner
         group new_resource.group
-        mode '0o755'
+        mode '0755'
       end
       template "#{new_resource.directory}/log/run" do
         source "sv-#{new_resource.template}-log-run.erb"
         cookbook new_resource.cookbook
         owner new_resource.owner
         group new_resource.group
-        mode '0o755'
+        mode '0755'
         variables(variables: new_resource.variables) unless new_resource.variables.empty?
       end
     end
@@ -79,7 +79,7 @@ action :enable do
       cookbook new_resource.cookbook
       owner new_resource.owner
       group new_resource.group
-      mode '0o755'
+      mode '0755'
       variables(variables: new_resource.variables) unless new_resource.variables.empty?
       only_if { new_resource.finish }
     end
@@ -88,7 +88,7 @@ action :enable do
   file "#{new_resource.directory}/down" do
     owner new_resource.owner
     group new_resource.group
-    mode '0o644'
+    mode '0644'
     content ''
     action new_resource.down ? :create : :delete
   end
@@ -97,14 +97,14 @@ action :enable do
     directory "#{new_resource.directory}/env" do
       owner new_resource.owner
       group new_resource.group
-      mode '0o755'
+      mode '0755'
     end
     new_resource.env.each do |var, value|
       file "#{new_resource.directory}/env/#{var}" do
         content value
         owner new_resource.owner
         group new_resource.group
-        mode '0o644'
+        mode '0644'
       end
     end
   end
