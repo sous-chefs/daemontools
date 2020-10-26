@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the daemontools cookbook.
 
-## Unreleased
+## v1.6.1 (2020-10-26)
 
 - Adapt to the latest cookstyle (6.21.1)
 
