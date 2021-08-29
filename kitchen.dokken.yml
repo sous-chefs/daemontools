@@ -2,14 +2,16 @@
 driver:
   name: dokken
   privileged: true
-  chef_version: current
+  chef_version: <%= ENV['CHEF_VERSION'] || 'current' %>
+  env: [CHEF_LICENSE=accept]
 
 transport:
   name: dokken
 
 provisioner:
   name: dokken
-  deprecations_as_errors: true
+  # TODO: unified_mode needs to be enabled
+  deprecations_as_errors: false
 
 verifier:
   name: inspec
