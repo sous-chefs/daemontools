@@ -23,7 +23,7 @@ directory 'daemontools service directory' do
 end
 
 if node['daemontools']['install_method'] == 'source'
-  if node['init_package'] == 'systemd'
+  if systemd?
     template '/usr/lib/systemd/system/daemontools.service' do
       source 'daemontools.service.erb'
       variables(

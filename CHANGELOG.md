@@ -4,6 +4,8 @@ This file is used to list changes made in each version of the daemontools cookbo
 
 ## Unreleased
 
+- resolved cookstyle error: recipes/svscan.rb:26:6 refactor: `Chef/Modernize/UseChefLanguageSystemdHelper`
+- resolved cookstyle error: resources/service.rb:160:1 refactor: `Chef/Modernize/ClassEvalActionClass`
 ## 1.6.3 - *2021-08-29*
 
 - Standardise files with files in sous-chefs/repo-management
