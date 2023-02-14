@@ -3,7 +3,7 @@ maintainer        'Sous Chefs'
 maintainer_email  'help@sous-chefs.org'
 license           'Apache-2.0'
 description       'Installs/Configures daemontools'
-version           '1.6.5'
+version           '1.6.6'
 
 depends 'pacman', '~> 1.2'
 
