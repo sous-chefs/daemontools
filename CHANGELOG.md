@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the daemontools cookbook.
 
-## Unreleased
+## 1.6.8 - *2023-04-01*
 
 ## 1.6.7 - *2023-03-02*
 
