@@ -33,7 +33,7 @@ bash 'install_daemontools' do
   not_if { ::File.exist?("#{node['daemontools']['bin_dir']}/svc") }
   code <<~EOCODE
     (tar zxvf daemontools.tar.gz -C /tmp/daemontools --strip-components 2)
-    (cd /tmp/daemontools; perl -pi -e 's/extern int errno;/\#include <errno.h>/' src/error.h)
+    (cd /tmp/daemontools; perl -pi -e 's/extern int errno;/#include <errno.h>/' src/error.h)
     (cd /tmp/daemontools; package/compile)
     (cd /tmp/daemontools; mv command/* #{node['daemontools']['bin_dir']})
   EOCODE
