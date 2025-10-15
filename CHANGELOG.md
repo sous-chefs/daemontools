@@ -2,6 +2,13 @@
 
 This file is used to list changes made in each version of the daemontools cookbook.
 
+## [1.6.19](https://github.com/sous-chefs/daemontools/compare/1.6.18...v1.6.19) (2025-10-15)
+
+
+### Bug Fixes
+
+* **ci:** Update workflows to use release pipeline ([#39](https://github.com/sous-chefs/daemontools/issues/39)) ([95544f9](https://github.com/sous-chefs/daemontools/commit/95544f943a3e913ac38b30bd64a2fc35119121f0))
+
 ## 1.6.5 - *2023-02-14*
 
 * Remove delivery folder
