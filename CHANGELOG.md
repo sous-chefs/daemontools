@@ -47,8 +47,8 @@ This file is used to list changes made in each version of the daemontools cookbo
 
 ## v1.1.0
 
-* **[COOK-3234](https://tickets.opscode.com/browse/COOK-3234)** - Fix issue where templates could not be updated after service is enabled
-* **[COOK-3207](https://tickets.opscode.com/browse/COOK-3207)** - Add Gentoo platform support via package installation
+* Fix issue where templates could not be updated after service is enabled
+* Add Gentoo platform support via package installation
 
 ## v1.0.2
 
