@@ -5,6 +5,7 @@
 ### Debian and Ubuntu
 
 - Debian ships both `daemontools` and `daemontools-run`; `daemontools-run` provides the service supervision bootstrap and `/etc/service`, so it is the correct package-oriented entry point for this cookbook on Debian-family systems.
+- Debian 13 remains package-supported, so it should be part of the active validation set alongside Debian 12 while both releases are in support.
 - Ubuntu ships both `daemontools` and `daemontools-run` in `universe`; `daemontools-run` is the package that wires `svscanboot` into the system and should be used for packaged installs.
 
 ### Arch Linux
@@ -21,6 +22,7 @@
 
 - No current official distro package source was identified for `daemontools` on RHEL-family or Amazon Linux targets in this migration.
 - On those platforms, the cookbook should treat source installation as the portable built-in path unless the operator supplies a local package and corresponding service manager integration.
+- Existing RHEL-family support should be represented through current downstream test targets such as AlmaLinux 9 rather than through EOL CentOS releases.
 
 ## Architecture Limitations
 

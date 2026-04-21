@@ -15,6 +15,10 @@ verifier:
   name: inspec
 
 platforms:
+  - name: almalinux-9
   - name: amazonlinux-2023
+  - name: archlinux
   - name: debian-12
+  - name: debian-13
+  - name: gentoo
   - name: ubuntu-24.04
