@@ -1,124 +1,98 @@
-# Description
+# daemontools
 
 [![Cookbook Version](https://img.shields.io/cookbook/v/daemontools.svg)](https://supermarket.chef.io/cookbooks/daemontools)
-[![Build Status](https://img.shields.io/circleci/project/github/sous-chefs/daemontools/master.svg)](https://circleci.com/gh/sous-chefs/daemontools)
-[![OpenCollective](https://opencollective.com/sous-chefs/backers/badge.svg)](#backers)
-[![OpenCollective](https://opencollective.com/sous-chefs/sponsors/badge.svg)](#sponsors)
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
 
-Installs [DJB's Daemontools](http://cr.yp.to/daemontools.html) and includes a service custom resource.
+Custom resources for installing daemontools, managing `svscan`, and defining supervised services.
 
-## Requirements
+This cookbook no longer exposes recipes or node attributes as its public API. Use the resources directly.
 
-### Platform
+## Supported Platforms
 
-Tested via [Test Kitchen](http://kitchen.ci).
+- Amazon Linux 2023
+- Debian 12+
+- Ubuntu 24.04+
+- Arch Linux via AUR
+- Gentoo via `sys-process/daemontools`
 
-- Ubuntu 20.04
-- CentOS 7, 8
-- AmazonLinux 2
-- Gentoo
-- ArchLinux
+Current distro and packaging constraints are documented in [LIMITATIONS.md](LIMITATIONS.md).
 
-This cookbook is known in the past to work on ArchLinux and Gentoo, but as they are rolling release distributions, it is difficult to ensure compatibility over time.
+## Resources
 
-May work on other platforms with or without modification using the "source" installation method. See __Attributes__ and __Recipes__ below.
+- `daemontools_install_source`
+- `daemontools_install_package`
+- `daemontools_install_aur`
+- `daemontools_svscan`
+- `daemontools_service`
 
-### Depending Cookbooks
-
-- pacman - for `aur` recipe, on ArchLinux systems
-- build-essential - for `source` recipe
-
-#### Attributes
-
-- `node['daemontools']['bin_dir']` - Sets the location of the binaries for daemontools, default is selected by platform, or '/usr/local/bin' as a fallback.
-- `node['daemontools']['service_dir']` - Daemontools "service" directory where svscan will find services to manage.
-- `node['daemontools']['install_method']` - how to install daemontools, can be `source`, `package` or `aur` (for ArchLinux).
-- `node['daemontools']['start_svscan']` - whether to start `svscan` (includes the `svscan` recipe), `true` by default.
-- `node['daemontools']['package_name']` - name of the "daemontools" package, default value varies by platform.
-
-## Recipes
-
-### default
-
-The default recipe includes the appropriate installation method's recipe using the `node['daemontools']['install_method']` attribute.
-
-If the `start_svscan` attribute is true, then include the `svscan` recipe too.
-
-### package
-
-Installs the `daemontools` package, using the `node['daemontools']['package_name']` attribute. On Debian family systems, this is `daemontools-run`, which depends on `daemontools` (and provides run time / init system configuration).
-
-On other untested platforms (e.g., RHEL family), if a local `daemontools` package is built and it sets up the appropriate init system configuration (systemd, upstart, inittab), then this recipe will be sufficient. Otherwise, write a custom recipe.
-
-### aur
-
-Used on ArchLinux systems to install daemontools from the Arch User Repository (AUR). Exits gracefully without exception if used on other platforms.
-
-### source
-
-The source installation of daemontools should work on most other platforms that do not have a package available. A custom recipe may be required to configure the `svscan` service init script or upstart or systemd configuration.
-
-### svscan
-
-Enables and starts the `svscan` service. This requires that the local system have properly set up the `svscan` service for the appropriate init system. It's outside the scope of this cookbook to detect this for every possible platform, so a custom recipe may be required. For example, Debian family `daemontools-run` package provides this.
-
-## Resource
-
-This cookbook includes a custom resource, `daemontools_service`, for managing services with daemontools. Examples:
-
-```ruby
-daemontools_service "tinydns-internal" do
-  directory "/etc/djbdns/tinydns-internal"
-  template false
-  action [:enable,:start]
-end
-
-daemontools_service "chef-client" do
-  directory "/etc/sv/chef-client"
-  template "chef-client"
-  action [:enable,:start]
-  log true
-end
-```
-
-Daemontools itself can perform a number of actions on services. The following are commands sent via the `svc` program. See its man page for more information.
-
-- start, stop, status, restart, up, down, once, pause, cont, hup, alrm, int, term, kill
-
-Enabling a service (`:enable` action) is done by setting up the directory located by the `directory` resource attribute. The following are set up:
-
-- `run` script that runs the service startup using the `template` resource attribute name.
-- `log/run` directory and script that runs the logger if the resource attribute `log` is true.
-- `finish` script, if specified using the `finish` resource attribute
-- `env` directory, containing ENV variables if specified with the `env` resource attribute
-- links the `node['daemontools']['service_dir']/service_name` to the `service_name` directory.
-
-The default action is `:start` - once enabled daemontools services are started by svscan anyway.
-
-The name attribute for the resource is `service_name`.
+Resource-specific documentation lives under `documentation/`.
 
 ## Usage
 
-Include the daemontools recipe on nodes that should have daemontools installed for managing services. Use the `daemontools_service` custom resource for any services that should be managed by daemontools. In your cookbooks where `daemontools_service` is used, create the appropriate run and log-run scripts for your service. For example if the service is "flowers":
+### Source install with managed `svscan`
 
 ```ruby
-daemontools_service "flowers" do
-  directory "/etc/sv/flowers"
-  template "flowers"
-  action [:enable, :start]
-  log true
+daemontools_install_source 'default' do
+  bin_dir '/usr/local/bin'
+  service_dir '/etc/service'
+end
+
+daemontools_svscan 'default' do
+  install_style :source
+  bin_dir '/usr/local/bin'
+  service_dir '/etc/service'
 end
 ```
 
-Create these templates in your cookbook:
+### Debian or Ubuntu package install
+
+```ruby
+daemontools_install_package 'default' do
+  package_name 'daemontools-run'
+  service_dir '/etc/service'
+end
+
+daemontools_svscan 'default' do
+  install_style :package
+  service_name 'daemontools'
+  service_dir '/etc/service'
+end
+```
+
+### Arch Linux AUR install
+
+```ruby
+daemontools_install_aur 'default' do
+  package_name 'daemontools'
+  service_dir '/etc/service'
+end
+
+daemontools_svscan 'default' do
+  install_style :aur
+  service_name 'svscan'
+  service_dir '/etc/service'
+end
+```
+
+### Define a supervised service
+
+```ruby
+daemontools_service 'flowers' do
+  directory '/etc/sv/flowers'
+  template 'flowers'
+  bin_dir '/usr/local/bin'
+  service_dir '/etc/service'
+  log true
+  action %i(enable start)
+end
+```
+
+Templates are still expected in the consuming cookbook:
 
 - `templates/default/sv-flowers-run.erb`
 - `templates/default/sv-flowers-log-run.erb`
 
-If your service also has a finish script, set the resource attribute `finish` to true and create `sv-flowers-finish.erb`.
-
-The content of the scripts should be appropriate for the "flowers" service.
+If the service uses a finish script, set `finish true` and provide `sv-flowers-finish.erb`.
 
 ## Contributors
 

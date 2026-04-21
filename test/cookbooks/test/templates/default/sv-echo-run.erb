@@ -1,0 +1,4 @@
+#!/bin/sh
+
+exec 2>&1
+exec envuidgid root envdir ./env softlimit -o250 -p20 -d10000000 ./bin/echo Oneshot

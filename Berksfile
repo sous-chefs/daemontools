@@ -2,4 +2,6 @@ source 'https://supermarket.chef.io'
 
 metadata
 
-cookbook 'daemontools_test', path: 'test/cookbooks/daemontools_test'
+group :integration do
+  cookbook 'test', path: 'test/cookbooks/test'
+end

@@ -1,0 +1,7 @@
+---
+name: service
+title: daemontools_service suite
+maintainer: Sous Chefs
+license: Apache-2.0
+summary: Verifies daemontools_service behavior
+version: 1.0.0
