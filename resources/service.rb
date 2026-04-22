@@ -1,21 +1,7 @@
-#
-# Cookbook:: daemontools
-# Resource:: service
-#
-# Copyright:: 2010, Opscode, Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
+# frozen_string_literal: true
+
+provides :daemontools_service
+unified_mode true
 
 # -u: Up. If the service is not running, start it. If the service stops, restart it.
 # -d: Down. If the service is running, send it a TERM signal and then a CONT signal. After it stops, do not restart it.
@@ -30,6 +16,8 @@
 
 default_action :start
 
+include Daemontools::Helpers
+
 property :service_name, String, name_property: true
 property :directory, String, required: true
 property :template, [String, false], default: false
@@ -41,6 +29,8 @@ property :finish, [true, false]
 property :log, [true, false]
 property :env, Hash, default: {}
 property :down, [true, false], default: false
+property :bin_dir, String, default: lazy { default_runtime_bin_dir }
+property :service_dir, String, default: lazy { default_service_dir }
 
 action :enable do
   directory new_resource.directory do
@@ -61,6 +51,11 @@ action :enable do
     end
     if new_resource.log
       directory "#{new_resource.directory}/log" do
+        owner new_resource.owner
+        group new_resource.group
+        mode '0755'
+      end
+      directory "#{new_resource.directory}/log/main" do
         owner new_resource.owner
         group new_resource.group
         mode '0755'
@@ -109,7 +104,7 @@ action :enable do
     end
   end
 
-  link "#{node['daemontools']['service_dir']}/#{new_resource.service_name}" do
+  link "#{new_resource.service_dir}/#{new_resource.service_name}" do
     to new_resource.directory
   end
 end
@@ -118,18 +113,18 @@ action :disable do
   # https://cr.yp.to/daemontools/faq/create.html#remove
   execute "service #{new_resource.service_name} => disable" do
     command <<~EOCMD
-      mv #{node['daemontools']['service_dir']}/#{new_resource.service_name} #{node['daemontools']['service_dir']}/.#{new_resource.service_name}
-      cd #{node['daemontools']['service_dir']}/.#{new_resource.service_name} && svc -dx . log
-      rm #{node['daemontools']['service_dir']}/.#{new_resource.service_name}
+      mv #{new_resource.service_dir}/#{new_resource.service_name} #{new_resource.service_dir}/.#{new_resource.service_name}
+      cd #{new_resource.service_dir}/.#{new_resource.service_name} && #{new_resource.bin_dir}/svc -dx . log
+      rm #{new_resource.service_dir}/.#{new_resource.service_name}
     EOCMD
-    only_if { supervise_running(new_resource.directory) }
+    only_if { supervise_running(new_resource.directory, new_resource.bin_dir, new_resource.service_dir) }
   end
 end
 
 action :start do
   execute "service #{new_resource.service_name} => start" do
-    command "svc -u #{node['daemontools']['service_dir']}/#{new_resource.service_name}"
-    not_if { supervise_running(new_resource.directory) }
+    command "#{new_resource.bin_dir}/svc -u #{new_resource.service_dir}/#{new_resource.service_name}"
+    not_if { supervise_running(new_resource.directory, new_resource.bin_dir, new_resource.service_dir) }
   end
 end
 
@@ -151,25 +146,27 @@ SVC_ACTIONS = {
 SVC_ACTIONS.each do |act, opt|
   action act do
     execute "service #{new_resource.service_name} => #{act}" do
-      command "svc #{opt} #{node['daemontools']['service_dir']}/#{new_resource.service_name}"
-      only_if { supervise_running(new_resource.directory) }
+      command "#{new_resource.bin_dir}/svc #{opt} #{new_resource.service_dir}/#{new_resource.service_name}"
+      only_if { supervise_running(new_resource.directory, new_resource.bin_dir, new_resource.service_dir) }
     end
   end
 end
 
 action_class do
+  include Daemontools::Helpers
+
   def shell_out_with_systems_locale(command, **opts)
     options = { environment: { 'LC_ALL' => nil } }.merge(opts)
     shell_out(command, **options)
   end
 
-  def supervise_running(directory)
+  def supervise_running(directory, bin_dir, service_dir)
     # Give svscan enough time to run supervise as it scans every 5 seconds
-    if ::File.exist?(node['daemontools']['service_dir'])
-      ctime = ::File.ctime(node['daemontools']['service_dir'])
+    if ::File.exist?(service_dir)
+      ctime = ::File.ctime(service_dir)
       diff = Time.now - ctime
       sleep 6 - diff if diff < 6
     end
-    shell_out("svok #{directory}", environment: { 'LC_ALL' => nil }).exitstatus == 0
+    shell_out("#{bin_dir}/svok #{directory}", environment: { 'LC_ALL' => nil }).exitstatus == 0
   end
 end

@@ -1,0 +1,7 @@
+---
+name: default
+title: Default daemontools suite
+maintainer: Sous Chefs
+license: Apache-2.0
+summary: Verifies source installation and svscan management
+version: 1.0.0
