@@ -73,6 +73,11 @@ action :create do
       perl -0pi -e 's/#include "sig.h"/#include "sig.h"\\n#include <unistd.h>/' src/sig_pause.c
       perl -0pi -e 's/sigpause\\(0\\);/pause();/' src/sig_pause.c
       perl -0pi -e 's/#include "str.h"/#include "str.h"\\n#include <unistd.h>/' src/matchtest.c
+      perl -0pi -e 's/#include <unistd.h>/#include <unistd.h>\\n#include <stdio.h>/' src/multilog.c
+      perl -0pi -e 's/execve\\("\\/bin\\/sh",args,environ\\)/execve("\\/bin\\/sh",(char * const *) args,environ)/' src/multilog.c
+      perl -0pi -e 's/#include <unistd.h>/#include <unistd.h>\\n#include <stdio.h>/' src/supervise.c
+      perl -0pi -e 's/execve\\(\\*run,run,environ\\)/execve(*run,(char * const *) run,environ)/' src/supervise.c
+      perl -0pi -e 's/pathexec_run\\(([^,]+),([^,]+),environ\\)/pathexec_run($1,$2,(const char * const *) environ)/g' src/svscan.c
       perl -0pi -e 's/\\n\\z/ -Wno-error=implicit-function-declaration\\n/' src/conf-cc
       package/compile
       install -m 0555 command/* #{new_resource.bin_dir}
