@@ -2,6 +2,17 @@
 
 This file is used to list changes made in each version of the daemontools cookbook.
 
+## [2.0.0](https://github.com/sous-chefs/daemontools/compare/v1.6.19...v2.0.0) (2026-04-22)
+
+
+### ⚠ BREAKING CHANGES
+
+* migrate to custom resources ([#45](https://github.com/sous-chefs/daemontools/issues/45))
+
+### Features
+
+* migrate to custom resources ([#45](https://github.com/sous-chefs/daemontools/issues/45)) ([53a8193](https://github.com/sous-chefs/daemontools/commit/53a81936d280029183df3f168482b9cf06f79895))
+
 ## [1.6.19](https://github.com/sous-chefs/daemontools/compare/1.6.18...v1.6.19) (2025-10-15)
 
 
