@@ -55,6 +55,11 @@ action :enable do
         group new_resource.group
         mode '0755'
       end
+      directory "#{new_resource.directory}/log/main" do
+        owner new_resource.owner
+        group new_resource.group
+        mode '0755'
+      end
       template "#{new_resource.directory}/log/run" do
         source "sv-#{new_resource.template}-log-run.erb"
         cookbook new_resource.cookbook

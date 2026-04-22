@@ -51,4 +51,13 @@ describe Daemontools::Helpers do
       expect(helper_host.default_service_dir).to eq('/service')
     end
   end
+
+  context 'on amazon linux' do
+    let(:platform) { 'amazon' }
+    let(:platform_family) { 'amazon' }
+
+    it 'includes archive tooling for source builds' do
+      expect(helper_host.default_source_build_packages).to eq(%w(gcc make perl tar))
+    end
+  end
 end

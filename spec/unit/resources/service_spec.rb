@@ -20,6 +20,7 @@ describe 'daemontools_service' do
     end
 
     it { is_expected.to create_template('/opt/enable-oneshot/run') }
+    it { is_expected.to create_directory('/opt/enable-oneshot/log/main') }
     it { is_expected.to create_template('/opt/enable-oneshot/log/run') }
     it { is_expected.to create_link('/etc/service/enable-oneshot').with(to: '/opt/enable-oneshot') }
   end

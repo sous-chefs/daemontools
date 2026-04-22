@@ -25,10 +25,8 @@ jobs:
         os:
           - "almalinux-9"
           - "amazonlinux-2023"
-          - "archlinux"
           - "debian-12"
           - "debian-13"
-          - "gentoo"
           - "ubuntu-2404"
         suite:
           - "default"

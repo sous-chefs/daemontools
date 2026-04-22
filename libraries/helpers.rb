@@ -36,7 +36,7 @@ module Daemontools
       if platform_family?('debian')
         %w(build-essential perl)
       else
-        %w(gcc make perl)
+        %w(gcc make perl tar)
       end
     end
 

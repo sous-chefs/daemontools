@@ -61,6 +61,19 @@ action :create do
     creates ::File.join(new_resource.bin_dir, 'svc')
     command <<~EOH
       perl -0pi -e 's/extern int errno;/#include <errno.h>/' src/error.h
+      perl -0pi -e 's/#include "pathexec.h"/#include "pathexec.h"\\n#include <unistd.h>/' src/pathexec_run.c
+      perl -0pi -e 's/execve\\(([^,]+),argv,envp\\)/execve($1,(char * const *) argv,(char * const *) envp)/g' src/pathexec_run.c
+      perl -0pi -e 's/#include <unistd.h>/#include <unistd.h>\\n#include <grp.h>/' src/chkshsgr.c
+      perl -0pi -e 's/short x\\[4\\];/gid_t x[4];/' src/chkshsgr.c
+      perl -0pi -e 's/#include "prot.h"/#include "prot.h"\\n#include <grp.h>\\n#include <unistd.h>/' src/prot.c
+      perl -0pi -e 's/setgroups\\(1,&gid\\)/setgroups(1,(gid_t *) &gid)/' src/prot.c
+      perl -0pi -e 's/setgid\\(gid\\)/setgid((gid_t) gid)/' src/prot.c
+      perl -0pi -e 's/setuid\\(uid\\)/setuid((uid_t) uid)/' src/prot.c
+      perl -0pi -e 's/#include "seek.h"/#include "seek.h"\\n#include <unistd.h>/' src/seek_set.c
+      perl -0pi -e 's/#include "sig.h"/#include "sig.h"\\n#include <unistd.h>/' src/sig_pause.c
+      perl -0pi -e 's/sigpause\\(0\\);/pause();/' src/sig_pause.c
+      perl -0pi -e 's/#include "str.h"/#include "str.h"\\n#include <unistd.h>/' src/matchtest.c
+      perl -0pi -e 's/\\n\\z/ -Wno-error=implicit-function-declaration\\n/' src/conf-cc
       package/compile
       install -m 0555 command/* #{new_resource.bin_dir}
     EOH
