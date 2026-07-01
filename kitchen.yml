@@ -58,8 +58,10 @@ x-verifiers:
 
 suites:
   - name: default
+    named_run_list: default
     run_list: *default_run_list
     verifier: *default_verifier
   - name: service
+    named_run_list: service
     run_list: *service_run_list
     verifier: *service_verifier
