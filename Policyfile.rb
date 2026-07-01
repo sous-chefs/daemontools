@@ -2,11 +2,10 @@
 
 name 'daemontools'
 
-default_source :supermarket
-
 run_list 'test::default'
 
 cookbook 'daemontools', path: '.'
+cookbook 'pacman', path: './test/cookbooks/pacman'
 cookbook 'test', path: './test/cookbooks/test'
 
 Dir.children('./test/cookbooks/test/recipes').grep(/\.rb\z/).sort.each do |recipe|
