@@ -2,6 +2,13 @@
 
 This file is used to list changes made in each version of the daemontools cookbook.
 
+## [2.0.1](https://github.com/sous-chefs/daemontools/compare/v2.0.0...v2.0.1) (2026-07-09)
+
+
+### Bug Fixes
+
+* migrate to Policyfile and map Kitchen suites ([#52](https://github.com/sous-chefs/daemontools/issues/52)) ([9ded2ff](https://github.com/sous-chefs/daemontools/commit/9ded2ff88c89ec59df1dc0644b491ade9eb6c8c3))
+
 ## [2.0.0](https://github.com/sous-chefs/daemontools/compare/v1.6.19...v2.0.0) (2026-04-22)
 
 
